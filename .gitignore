@@ -1,0 +1,57 @@
+# Python compilé
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnements virtuels locaux
+env/
+venv/
+ENV/
+.venv/
+
+# Fichiers SQLite locaux (dev uniquement)
+db.sqlite3
+
+# Logs
+*.log
+
+# Migrations compilées (généralement on versionne les migrations, sauf si tu ne veux pas)
+# Ici, on versionne les migrations, donc on ne les ignore pas
+# */migrations/
+# !*/migrations/__init__.py
+
+# Fichiers de config locaux sensibles
+.env
+.env.*
+
+# Fichiers temporaires d'éditeur et système
+*.swp
+*.swo
+*.bak
+.DS_Store
+
+# Cache Pytest
+.pytest_cache/
+
+# Celery beat schedule
+celerybeat-schedule
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Docker : on versionne Dockerfile, docker-compose.yml et render.yaml
+# On n’ignore rien ici
+db.sqlite3
+
+# Node modules (si tu utilises frontend dans le même repo)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# Autres fichiers temporaires
+*.tmp
+
+# Fichiers de configuration de l'éditeur
+*.sublime-project

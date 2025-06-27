@@ -14,10 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Permet à Render d'exécuter les migrations automatiquement
 RUN chmod +x /app/build.sh
 
-# Collecte des fichiers statiques pour WhiteNoise
-RUN python manage.py collectstatic --noinput
-
-CMD ["gunicorn", "stage.wsgi:application", "--bind", "0.0.0.0:$PORT"]
+CMD ["/app/build.sh"]
