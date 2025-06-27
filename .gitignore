@@ -55,3 +55,4 @@ node_modules/
 
 # Fichiers de configuration de l'éditeur
 *.sublime-project
+py.py
