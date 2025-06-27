@@ -1,0 +1,13 @@
+djangorestframework-simplejwt
+django-cors-headers
+django-extensions
+drf-nested-routers
+django-filter
+drf-extra-fields
+Django
+gunicorn
+
+
+# docker-compose up --build
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+#  -keyout nginx/certs/key.pem -out nginx/certs/cert.pem -config openssl.cnf -extensions req_ext
