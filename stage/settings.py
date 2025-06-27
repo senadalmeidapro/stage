@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'U2-1LZ7_moM9vcbJsrfLUPpfx0UlKY9ZV-oK5_1wFcvcFPnWqfa4-cEgOL9_-YoA_R0O1KC906XGMDwaUxmmMUewz613a9eOoQI3rFSf9UpLrqrDdCWWjbAg1eto7HY5nRrM3A'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'key_de_dev_pour_local')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',"192.168.98.20",]
+ALLOWED_HOSTS = [
+    # 'localhost',
+    # '127.0.0.1',
+    # '192.168.98.20',
+    os.getenv('RENDER_EXTERNAL_HOSTNAME', ''),  # récupère automatiquement
+]
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 
 # Application definition
@@ -90,10 +99,7 @@ WSGI_APPLICATION = 'stage.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
 }
 
 
