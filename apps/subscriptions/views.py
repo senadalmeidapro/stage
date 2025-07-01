@@ -1,5 +1,4 @@
-from rest_framework import viewsets, status
-from rest_framework import mixins
+from rest_framework import viewsets, mixins, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,11 +7,11 @@ from apps.users.models import UserType
 from .models import Plan, Subscription
 from .serializers import PlanSerializer, SubscriptionSerializer, MySubscriptionSerializer
 
+
 class PlanViewSet(viewsets.ModelViewSet):
     """
-    ViewSet pour la gestion des plans d’abonnement.
-    Accessible uniquement aux utilisateurs authentifiés.
-    Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
+    Gestion des plans d’abonnement.
+    Accessible aux utilisateurs authentifiés.
     """
     serializer_class = PlanSerializer
     permission_classes = [IsAuthenticated]
@@ -28,15 +27,15 @@ class PlanViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save()
 
+
 class GetPlanViewSet(
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     """
-    ViewSet pour la gestion des plans d’abonnement.
-    Accessible uniquement aux utilisateurs authentifiés.
-    Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
+    Consultation publique des plans actifs d’une crèche donnée.
+    Accessible à tous (AllowAny).
     """
     serializer_class = PlanSerializer
     permission_classes = [AllowAny]
@@ -48,9 +47,8 @@ class GetPlanViewSet(
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """
-    ViewSet pour gérer les abonnements parentaux à un plan.
-    Chaque abonnement est lié à un parent (UserType)
-    et peut inclure plusieurs enfants via des SubscriptionDetail.
+    Gestion des abonnements liés à un plan.
+    Authentification requise.
     """
     queryset = Subscription.objects.select_related('plan', 'parent').prefetch_related('details')
     serializer_class = SubscriptionSerializer
@@ -72,12 +70,10 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         plan_id = self.kwargs.get('plans_pk')
         plan = get_object_or_404(Plan, id=plan_id)
-
         try:
             parent = UserType.objects.get(user=self.request.user, type='parent')
         except UserType.DoesNotExist:
             raise ValidationError("Vous n’avez pas de compte parent associé.")
-
         serializer.save(parent=parent, plan=plan)
 
     def update(self, request, *args, **kwargs):
@@ -96,8 +92,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
 class MySubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Vue pour récupérer les abonnements du parent connecté,
-    avec tous les détails associés récursivement.
+    Liste les abonnements du parent connecté.
     """
     serializer_class = MySubscriptionSerializer
     permission_classes = [IsAuthenticated]
@@ -108,6 +103,10 @@ class MySubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
             parent = UserType.objects.get(user=user, type='parent')
         except UserType.DoesNotExist:
             return Subscription.objects.none()
-        return Subscription.objects.filter(parent=parent, details__child__existe=True, plan__is_active=True).prefetch_related(
+        return Subscription.objects.filter(
+            parent=parent,
+            details__child__existe=True,
+            plan__is_active=True
+        ).prefetch_related(
             'details__child', 'details__classroom', 'details__group', 'plan'
         )
