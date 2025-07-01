@@ -15,15 +15,7 @@ class PlanViewSet(viewsets.ModelViewSet):
     Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
     """
     serializer_class = PlanSerializer
-    
-    def get_permissions(self):
-        if self.request.method in ['GET', 'HEAD', 'OPTIONS']:
-            # Pour GET, HEAD, OPTIONS → autorise tout le monde
-            permission_classes = [AllowAny]
-        else:
-            # Pour POST, PUT, PATCH, DELETE → seulement les authentifiés
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         nursery_id = self.kwargs.get("nursery_pk")
