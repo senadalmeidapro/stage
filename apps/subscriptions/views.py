@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework import mixins
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import ValidationError
 from apps.users.models import UserType
 from .models import Plan, Subscription
@@ -15,7 +15,15 @@ class PlanViewSet(viewsets.ModelViewSet):
     Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
     """
     serializer_class = PlanSerializer
-    permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.request.method in ['GET', 'HEAD', 'OPTIONS']:
+            # Pour GET, HEAD, OPTIONS → autorise tout le monde
+            permission_classes = [AllowAny]
+        else:
+            # Pour POST, PUT, PATCH, DELETE → seulement les authentifiés
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         nursery_id = self.kwargs.get("nursery_pk")
