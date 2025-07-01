@@ -28,7 +28,11 @@ class PlanViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save()
 
-class GetPlanViewSet(viewsets.ModelViewSet):
+class GetPlanViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     ViewSet pour la gestion des plans d’abonnement.
     Accessible uniquement aux utilisateurs authentifiés.
