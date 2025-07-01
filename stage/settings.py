@@ -79,6 +79,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://192.168.206.231:5173",
     "https://plateform-2bjr.onrender.com",
+    "https://plateforme-creche.onrender.com",
 ]
 
 CORS_ALLOW_METHODS = [
