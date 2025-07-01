@@ -15,7 +15,7 @@ class PlanViewSet(viewsets.ModelViewSet):
     Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
     """
     serializer_class = PlanSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         nursery_id = self.kwargs.get("nursery_pk")
@@ -27,6 +27,19 @@ class PlanViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+class GetPlanViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet pour la gestion des plans d’abonnement.
+    Accessible uniquement aux utilisateurs authentifiés.
+    Filtre les plans actifs liés à une crèche donnée (nursery_pk dans l’URL).
+    """
+    serializer_class = PlanSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        nursery_id = self.kwargs.get("mynursery_pk")
+        return Plan.objects.filter(is_active=True, nursery_id=nursery_id)
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
