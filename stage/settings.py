@@ -12,16 +12,17 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "plateforme-creche.onrender.com",
     "stage-backend-c4pz.onrender.com",
-    "plateform-2bjr.onrender.com"  # ← seulement si tu utilises aussi cet ancien nom
+    "plateform-2bjr.onrender.com",
+    "shiny-queijadas-52b27c.netlify.app",  # Ajout Netlify ici
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://plateforme-creche.onrender.com",
     "https://stage-backend-c4pz.onrender.com",
     "https://*.onrender.com",
+    "https://shiny-queijadas-52b27c.netlify.app",  # Ajout Netlify ici
 ]
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,9 +46,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Doit être tout en haut
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # obligatoire pour Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,11 +92,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# CORS settings
+# CORS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://plateforme-creche.onrender.com",
     "https://stage-backend-c4pz.onrender.com",
+    "https://shiny-queijadas-52b27c.netlify.app",  # Ajout Netlify
 ]
 
 CORS_ALLOW_METHODS = [
@@ -154,7 +156,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Sécurité production
+# Security
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
