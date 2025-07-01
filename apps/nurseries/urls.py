@@ -27,4 +27,4 @@ plan_router = NestedDefaultRouter(nursery_router, r'plans', lookup='plans')
 plan_router.register(r'subscriptions', SubscriptionViewSet, basename='plans-subscription')
 router.register(r'mysubscriptions', MySubscriptionViewSet, basename='plans-subscription-get')
 
-urlpatterns = router.urls + nursery_router.urls + classroom_router.urls + plan_router.urls 
+urlpatterns = router.urls + nursery_router.urls + classroom_router.urls + plan_router.urls + mynursery_router.urls
