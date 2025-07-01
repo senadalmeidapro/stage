@@ -16,7 +16,7 @@ nursery_router.register(r'classrooms', ClassroomViewSet, basename='nursery-class
 nursery_router.register(r'activities', ActivityViewSet, basename='nursery-activity')
 
 mynursery_router = NestedDefaultRouter(router, r'mynursery', lookup='mynursery')
-mynursery_router.register(r'plans', GetPlanViewSet, basename='mynursery-plan')
+mynursery_router.register(r'myplans', GetPlanViewSet, basename='mynursery-plan')
 
 
 classroom_router = NestedDefaultRouter(nursery_router, r'classrooms', lookup='classroom')
