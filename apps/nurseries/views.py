@@ -1,5 +1,3 @@
-# views.py
-
 from rest_framework import viewsets, mixins, permissions, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -52,7 +50,7 @@ class NurseryViewSet(
 ):
     serializer_class = NurserySerializer
     permission_classes = [permissions.IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]  # pour création et update standard
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -73,21 +71,15 @@ class NurseryViewSet(
         detail=True,
         methods=['post', 'put', 'patch'],
         url_path='opening-hours',
-        parser_classes=[JSONParser]  # accepte application/json pour cet endpoint
+        parser_classes=[JSONParser]
     )
     def opening_hours(self, request, pk=None):
-        """
-        Point d’entrée pour POST/PUT/PATCH /api/client/nursery/{pk}/opening-hours/
-        Body (application/json) = liste d’objets {day, open_time, close_time, is_closed}
-        """
         nursery = self.get_object()
         serializer = OpeningHourSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
 
-        # Supprime les anciens horaires
         nursery.opening_hours.all().delete()
 
-        # Crée les nouveaux horaires
         for hou in serializer.validated_data:
             OpeningHour.objects.create(nursery=nursery, **hou)
 
