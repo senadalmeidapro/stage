@@ -3,7 +3,7 @@ from rest_framework_nested.routers import DefaultRouter, NestedDefaultRouter
 from .views import NurseryViewSet, NurseryAssistantViewSet, NurseryGetViewSet
 from apps.classrooms.views import ClassroomViewSet, GroupViewSet
 from apps.activities.views import ActivityViewSet, ClassroomActivityViewSet
-from apps.subscriptions.views import PlanViewSet, SubscriptionViewSet, MySubscriptionViewSet
+from apps.subscriptions.views import PlanViewSet, SubscriptionViewSet, MySubscriptionViewSet, GetPlanViewSet
 
 router = DefaultRouter()
 router.register(r'nursery', NurseryViewSet, basename='nursery')
@@ -14,6 +14,10 @@ nursery_router.register(r'assistants', NurseryAssistantViewSet, basename='nurser
 nursery_router.register(r'plans', PlanViewSet, basename='nursery-plan')
 nursery_router.register(r'classrooms', ClassroomViewSet, basename='nursery-classroom')
 nursery_router.register(r'activities', ActivityViewSet, basename='nursery-activity')
+
+mynursery_router = NestedDefaultRouter(router, r'mynursery', lookup='mynursery')
+mynursery_router.register(r'plans', GetPlanViewSet, basename='mynursery-plan')
+
 
 classroom_router = NestedDefaultRouter(nursery_router, r'classrooms', lookup='classroom')
 classroom_router.register(r'groups', GroupViewSet, basename='classroom-group')
