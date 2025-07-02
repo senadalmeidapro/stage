@@ -24,7 +24,8 @@ class ChildViewSet(mixins.CreateModelMixin,
         profil = UserType.objects.get(user=self.request.user)
         if profil.type !='parent':
             return PermissionDenied("Seul un parent peut inscrire un enfant")
-        serializer.save()
+        parent_id = profil.id
+        serializer.save(parent_id=parent_id)
 
     def perform_update(self, serializer):
         child = self.get_object()

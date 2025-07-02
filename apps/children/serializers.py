@@ -4,26 +4,21 @@ from apps.users.models import UserType
 from .models import *
 
 class ChildSerializer(serializers.ModelSerializer):
-    parent_id = serializers.PrimaryKeyRelatedField(
-        queryset=UserType.objects.filter(type='parent'),
-        source = 'parent',
-        write_only=True,
-        help_text="ID du parent (UserType avec rôle parent)"
-    )
     parent = UserTypeSerializer(read_only=True)
     read_only_fields = ['id']
 
     class Meta:
         model = Child
-        fields =['parent','id','parent_id','last_name','first_name','birthday','detail', 'joined_date','existe']
-        
+        fields = ['parent', 'id', 'last_name', 'first_name', 'birthday', 'detail', 'joined_date', 'existe']
+        read_only_fields = ['id', 'parent', 'joined_date']
         extra_kwargs = {
-            'last_name':{'required':True},
-            'first_name':{'required':True},
-            'birthday':{'required':True},
-            'detail':{'required':False},
-            'existe':{'required':False},
+            'last_name': {'required': True},
+            'first_name': {'required': True},
+            'birthday': {'required': True},
+            'detail': {'required': False},
+            'existe': {'required': False},
         }
+
 
 
     def __init__(self, *args, **kwargs):
