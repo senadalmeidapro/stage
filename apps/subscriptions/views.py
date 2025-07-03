@@ -105,7 +105,6 @@ class MySubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
             return Subscription.objects.none()
         return Subscription.objects.filter(
             parent=parent,
-            details__child__existe=True,
             plan__is_active=True
         ).prefetch_related(
             'details__child', 'details__classroom', 'details__group', 'plan'
