@@ -7,6 +7,38 @@ from django.core.files.storage import default_storage
 from .models import Nursery, OpeningHour, NurseryAssistant
 from .serializers import NurserySerializer, OpeningHourSerializer, NurseryAssistantSerializer
 
+
+class NurseryGetViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
+    permission_classes = [permissions.AllowAny]
+    queryset = Nursery.objects.filter(manager__type='nursery_manager', verified=True)
+    filter_backends = [filters.DjangoFilterBackend]
+    filterset_class = NurseryFilter
+    pagination_class = NurseryPagination
+
+    class BasicNurserySerializer(NurserySerializer):
+        class Meta(NurserySerializer.Meta):
+            fields = ['id', 'name', 'address']
+
+    class DetailedNurserySerializer(NurserySerializer):
+        class Meta(NurserySerializer.Meta):
+            fields = [
+                'id', 'name', 'address', 'contact_number', 'legal_status',
+                'max_age', 'max_children_per_class', 'photo_exterior',
+                'photo_interior', 'opening_hours', 'information'
+            ]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.BasicNurserySerializer
+        if self.action == 'retrieve':
+            return self.DetailedNurserySerializer
+        return super().get_serializer_class()
+
+
 class NurseryViewSet(viewsets.ModelViewSet):
     serializer_class = NurserySerializer
     permission_classes = [IsAuthenticated]
