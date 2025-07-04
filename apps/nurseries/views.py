@@ -1,11 +1,31 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
+from rest_framework.exceptions import PermissionDenied
+from django_filters import rest_framework as filters
 from django.core.files.storage import default_storage
+from rest_framework.pagination import PageNumberPagination
+
 from .models import Nursery, OpeningHour, NurseryAssistant
 from .serializers import NurserySerializer, OpeningHourSerializer, NurseryAssistantSerializer
+
+
+class NurseryFilter(filters.FilterSet):
+    name = filters.CharFilter(lookup_expr='icontains', help_text="Recherche par nom (insensible à la casse)", field_name='name')
+    address = filters.CharFilter(lookup_expr='startswith', help_text="Filtre par ville exacte", field_name='address')
+    max_age = filters.NumberFilter(field_name='max_age', lookup_expr='gte', help_text="Âge maximum")
+
+    class Meta:
+        model = Nursery
+        fields = ['name', 'address', 'max_age']
+
+
+class NurseryPagination(PageNumberPagination):
+    page_size = 10 
+    page_size_query_param = 'page_size' 
+    max_page_size = 100 
 
 
 class NurseryGetViewSet(
@@ -114,6 +134,7 @@ class NurseryViewSet(viewsets.ModelViewSet):
                 default_storage.delete(file.path)
         
         return super().destroy(request, *args, **kwargs)
+
 
 class NurseryAssistantViewSet(viewsets.ModelViewSet):
     serializer_class = NurseryAssistantSerializer
