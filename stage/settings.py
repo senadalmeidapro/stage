@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from datetime import timedelta
 import os
@@ -174,6 +175,29 @@ MAX_FILE_SIZES = {
     'image': 5 * 1024 * 1024       # 5MB
 }
 
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,  # ou stderr si tu préfères
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',  # ou INFO pour moins de détails
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
