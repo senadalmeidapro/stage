@@ -3,8 +3,8 @@ from .models import Nursery, OpeningHour, NurseryAssistant
 
 class OpeningHourInline(admin.TabularInline):
     model = OpeningHour
-    extra = 7  # Un formulaire pour chaque jour de la semaine
-    max_num = 7  # Maximum 7 jours
+    extra = 7
+    max_num = 7
     can_delete = False
 
 class NurseryAssistantInline(admin.TabularInline):
@@ -54,10 +54,5 @@ class OpeningHourAdmin(admin.ModelAdmin):
         return obj.get_day_display()
     get_day_display.short_description = 'Jour'
 
-@admin.register(NurseryAssistant)
-class NurseryAssistantAdmin(admin.ModelAdmin):
-    list_display = ('profil', 'nursery', 'classroom', 'group', 'is_manager', 'active')
-    list_filter = ('nursery', 'is_manager', 'active')
-    search_fields = ('profil__user__username', 'profil__user__email', 'nursery__name')
-    raw_id_fields = ('profil', 'nursery', 'classroom', 'group')
-    list_select_related = ('profil', 'nursery', 'classroom', 'group')
+# Supprimez complètement l'enregistrement séparé de NurseryAssistant
+# Puisque vous le gérez déjà via l'Inline dans NurseryAdmin
