@@ -21,7 +21,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://plateforme-creche.onrender.com",
     "https://stage-backend-c4pz.onrender.com",
     "https://*.onrender.com",
-    "https://shiny-queijadas-52b27c.netlify.app",  # Ajout Netlify ici
+    "https://shiny-queijadas-52b27c.netlify.app",
+    "https://shiny-queijadas-52b27c.netlify.app/",
 ]
 
 INSTALLED_APPS = [
